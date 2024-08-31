@@ -141,14 +141,14 @@ function ChatRoomContent({name,id,username}:{name:string,id:number,username:stri
   //   };
   // }, [id]);
     const [message, setMessage] = useState('')
-    const [messageList,setMessageList] = useState<Message[]>(api.post.getpost.useQuery({ id }).data)
-    const { data: postData, isSuccess, refetch } = api.post.getpost.useQuery({ id });
+    const [messageList,setMessageList] = useState<Message[]>(api.post.getpost.useQuery({ id }).data as Message[])
+    const { data: postData , isSuccess, refetch } = api.post.getpost.useQuery({ id });
     console.log('裂开了')
     const idRef = useRef(1); // 使用 useRef 来保存 id 的值
     useEffect(() => {
       // 在数据成功加载时更新状态
-      if (isSuccess && postData && !isEqual(messageList, postData)) {
-        setMessageList(postData);
+      if (isSuccess && postData  && !isEqual(messageList, postData as Message[])) {
+        setMessageList(postData as Message[]);
       }
     }, [isSuccess, postData, messageList]);
   
