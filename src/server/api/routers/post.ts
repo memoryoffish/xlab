@@ -34,4 +34,13 @@ export const postRouter = createTRPCRouter({
     }));
     return messages ?? null;
   }),
+  getlastpost: publicProcedure
+  .input(z.object({ id: z.number() }))
+  .query(async ({ ctx,input }) => {
+    const post = await ctx.db.query.posts.findFirst({
+      orderBy: (posts, { desc }) => [desc(posts.createdAt)],
+      where: eq(posts.roomid, input.id),
+    });
+
+})
 });

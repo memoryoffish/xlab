@@ -92,7 +92,7 @@ function ChatRoomList({setRoomid,setRoomname1,username}:{setRoomid:React.Dispatc
       <div className='roombutton'key={room.id}>    
           <button  className='room'onClick={() => handleRoomClick(room.id,room.roomname)}>
               <div id='justroomname'>{room.roomname}</div>
-              <div className='lastmessage'> {room.LastPost ? room.LastPost : 'No messages'}</div>
+              {/* <div className='lastmessage'> {room.LastPost ? room.LastPost : 'No messages'}</div> */}
 
           </button>
           <button className='roomdelete' onClick={()=>deleteroom(room.id)} >delete</button>
@@ -144,7 +144,6 @@ function ChatRoomContent({name,id,username}:{name:string,id:number,username:stri
     const [messageList,setMessageList] = useState<Message[]>(api.post.getpost.useQuery({ id }).data as Message[])
     const { data: postData , isSuccess, refetch } = api.post.getpost.useQuery({ id });
     console.log('裂开了')
-    const idRef = useRef(1); // 使用 useRef 来保存 id 的值
     useEffect(() => {
       // 在数据成功加载时更新状态
       if (isSuccess && postData  && !isEqual(messageList, postData as Message[])) {
@@ -169,6 +168,7 @@ function ChatRoomContent({name,id,username}:{name:string,id:number,username:stri
   
     // 辅助函数用于比较两个数组是否相等
     function isEqual(a: Message[], b: Message[]): boolean {
+      if(a==null||b==null) return false;
       if (a.length !== b.length) return false;
       for (let i = 0; i < a.length; i++) {
         if (a[i] !== b[i]) return false;
@@ -225,6 +225,9 @@ export  function Ome() {
   const[roomname,setRoomname]=useState('')
   const searchParams = useSearchParams();
   const username = searchParams.get('username'); // 获取查询参数中的 "username"
+  if (!username) {
+    return <div>请先登录</div>;
+  }
   return (
     <div className="ome-container">
             <div className="chatroom-container">
